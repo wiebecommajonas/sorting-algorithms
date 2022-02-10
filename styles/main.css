@@ -1,0 +1,74 @@
+html, body {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+
+    display: flex;
+    flex-flow: column;
+
+    font-family: sans-serif;
+}
+
+nav {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+
+    background-color: aliceblue;
+}
+
+nav ul {
+    display: flex;
+    flex-flow: row;
+
+    padding: 0;
+    list-style: none;
+}
+
+nav li {
+    margin-inline: 1.5em;
+}
+
+nav a {
+    text-decoration: none;
+    color: black;
+}
+
+.selected {
+    font-weight: 700;
+}
+
+.sample-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+
+.sample__wrapper {
+    position: absolute;
+    height: 100%;
+
+    display: flex;
+    flex-flow: row;
+    align-items: flex-end;
+}
+
+.sample {
+    background-color: aqua;
+    border: solid 1px black;
+    width: 0.5em;
+}
+
+
+.green {
+    background-color: greenyellow;
+}
+
+.yellow {
+    background-color: yellow;
+}
