@@ -192,7 +192,7 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "Sorting algorithms"
     , body =
-        [ Html.node "link" [ Html.Attributes.rel "stylesheet", Html.Attributes.href "/styles/main.css" ] []
+        [ Html.node "link" [ Html.Attributes.rel "stylesheet", Html.Attributes.href "../styles/main.css" ] []
         , Html.nav []
             [ Html.ul []
                 (List.map
