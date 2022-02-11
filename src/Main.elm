@@ -1,14 +1,16 @@
 module Main exposing (..)
 
 import Browser
+import Bubblesort exposing (bubblesort)
 import Dict exposing (update)
 import Html exposing (div, text)
 import Html.Attributes exposing (class, href, id, style, type_)
 import Html.Events exposing (onClick, onInput)
-import List.Extra
 import Process
+import Quicksort exposing (quicksort)
 import Random
 import Set exposing (Set)
+import Sorter exposing (Log, Sorter, SortingFunction, SortingList)
 import Task
 
 
@@ -21,86 +23,29 @@ type Msg
     | ShowLog
 
 
-type Sorter
-    = Quicksort
-
-
-type alias SortingList =
-    List ( Int, Float )
-
-
-type alias SortingFunction =
-    SortingList -> List Log
-
-
-type alias Log =
-    { pivot : Int, element : Int, result : SortingList }
-
-
-quicksortHelper : SortingList -> Int -> List ( Int, Int, Int ) -> List Log -> List Log
-quicksortHelper list element pivots log =
-    case pivots of
-        [] ->
-            log
-
-        ( pivot, start, end ) :: ps ->
-            if element >= end && end - start <= 1 then
-                case ps of
-                    [] ->
-                        log
-
-                    ( nextPivot, _, _ ) :: _ ->
-                        quicksortHelper list (nextPivot + 1) ps log
-
-            else if element >= end then
-                let
-                    newPivots =
-                        ps ++ [ ( start, start, pivot ), ( pivot + 1, pivot + 1, end ) ]
-
-                    ( nextPivot, _, _ ) =
-                        List.head newPivots |> Maybe.withDefault ( -1, -1, -1 )
-                in
-                quicksortHelper list (nextPivot + 1) newPivots log
-
-            else
-                let
-                    ( elId, elValue ) =
-                        List.Extra.getAt element list |> Maybe.withDefault ( -1, -1 )
-
-                    ( pivId, pivValue ) =
-                        List.Extra.getAt pivot list |> Maybe.withDefault ( -1, -1 )
-                in
-                if elValue < pivValue then
-                    let
-                        newList =
-                            List.take pivot list ++ ( elId, elValue ) :: List.drop pivot (List.Extra.removeIfIndex ((==) element) list)
-
-                        newLog =
-                            List.append log [ { pivot = pivId, element = elId, result = newList } ]
-                    in
-                    quicksortHelper newList (element + 1) (( pivot + 1, start, end ) :: ps) newLog
-
-                else
-                    quicksortHelper list (element + 1) pivots <| List.append log [ { pivot = pivId, element = elId, result = list } ]
-
-
-quicksort : SortingList -> List Log
-quicksort list =
-    quicksortHelper list 1 [ ( 0, 0, List.length list ) ] []
+allSorters : List Sorter
+allSorters =
+    [ Sorter.Quicksort, Sorter.Bubblesort ]
 
 
 nameOf : Sorter -> String
 nameOf sorter =
     case sorter of
-        Quicksort ->
+        Sorter.Quicksort ->
             "Quicksort"
+
+        Sorter.Bubblesort ->
+            "Bubblesort"
 
 
 sortingFunction : Sorter -> SortingFunction
 sortingFunction sorter =
     case sorter of
-        Quicksort ->
+        Sorter.Quicksort ->
             quicksort
+
+        Sorter.Bubblesort ->
+            bubblesort
 
 
 type alias Model =
@@ -119,17 +64,12 @@ generateSample size =
     Random.generate NewSample (Random.list size (Random.float 10 90))
 
 
-allSorters : List Sorter
-allSorters =
-    [ Quicksort ]
-
-
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { sampleSize = 0
       , sample = []
       , speed = 10
-      , sorter = Quicksort
+      , sorter = Sorter.Quicksort
       , green = Set.empty
       , yellow = Set.empty
       , log = []
@@ -209,7 +149,7 @@ view model =
                     allSorters
                 )
             , Html.ul []
-                [ Html.li [] [ Html.input [ type_ "range", Html.Attributes.min "5", Html.Attributes.max "200", onInput <| \input -> ChangeSpeed (String.toFloat input |> Maybe.withDefault 10) ] [] ]
+                [ Html.li [] [ Html.input [ type_ "range", Html.Attributes.min "1", Html.Attributes.max "500", onInput <| \input -> ChangeSpeed (String.toFloat input |> Maybe.withDefault 1 |> (/) 500) ] [] ]
                 , Html.li [] [ Html.a [ href "#", onClick Sort ] [ text "Sort" ] ]
                 , Html.li [] [ Html.a [ href "#", onClick Reset ] [ text "Reset" ] ]
                 ]

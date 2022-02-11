@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.T.D === region.Z.D)
+	if (region.Q.D === region.X.D)
 	{
-		return 'on line ' + region.T.D;
+		return 'on line ' + region.Q.D;
 	}
-	return 'on lines ' + region.T.D + ' through ' + region.Z.D;
+	return 'on lines ' + region.Q.D + ' through ' + region.X.D;
 }
 
 
@@ -2705,8 +2705,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		o: func(record.o),
-		U: record.U,
-		R: record.R
+		R: record.R,
+		O: record.O
 	}
 });
 
@@ -2975,10 +2975,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.o;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.U;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.R;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.R) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.O) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3968,7 +3968,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		impl.aM,
 		impl.aK,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.S && impl.S(sendToApp)
+			var divertHrefToApp = impl.P && impl.P(sendToApp)
 			var view = impl.aN;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -4043,7 +4043,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		S: function(sendToApp)
+		P: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.al === next.al
-							&& curr.ac === next.ac
-							&& curr.ai.a === next.ai.a
+							&& curr.ak === next.ak
+							&& curr.aa === next.aa
+							&& curr.ah.a === next.ah.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4237,7 +4237,7 @@ function _Browser_getViewport()
 			au: _Browser_window.pageXOffset,
 			av: _Browser_window.pageYOffset,
 			at: _Browser_doc.documentElement.clientWidth,
-			ab: _Browser_doc.documentElement.clientHeight
+			_: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4248,7 +4248,7 @@ function _Browser_getScene()
 	var elem = _Browser_doc.documentElement;
 	return {
 		at: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		ab: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		_: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4273,13 +4273,13 @@ function _Browser_getViewportOf(id)
 		return {
 			ap: {
 				at: node.scrollWidth,
-				ab: node.scrollHeight
+				_: node.scrollHeight
 			},
 			as: {
 				au: node.scrollLeft,
 				av: node.scrollTop,
 				at: node.clientWidth,
-				ab: node.clientHeight
+				_: node.clientHeight
 			}
 		};
 	});
@@ -4314,13 +4314,13 @@ function _Browser_getElement(id)
 				au: x,
 				av: y,
 				at: _Browser_doc.documentElement.clientWidth,
-				ab: _Browser_doc.documentElement.clientHeight
+				_: _Browser_doc.documentElement.clientHeight
 			},
-			K: {
+			W: {
 				au: x + rect.left,
 				av: y + rect.top,
 				at: rect.width,
-				ab: rect.height
+				_: rect.height
 			}
 		};
 	});
@@ -4942,7 +4942,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {aa: fragment, ac: host, ag: path, ai: port_, al: protocol, am: query};
+		return {Z: fragment, aa: host, ae: path, ah: port_, ak: protocol, al: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5221,7 +5221,7 @@ var $elm$core$Task$perform = F2(
 			A2($elm$core$Task$map, toMessage, task));
 	});
 var $elm$browser$Browser$document = _Browser_document;
-var $author$project$Main$Quicksort = 0;
+var $author$project$Sorter$Quicksort = 0;
 var $elm$core$Set$Set_elm_builtin = $elm$core$Basics$identity;
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
@@ -5396,7 +5396,7 @@ var $author$project$Main$generateSample = function (size) {
 };
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{w: $elm$core$Set$empty, x: _List_Nil, y: _List_Nil, N: 0, E: 0, F: 10, B: $elm$core$Set$empty},
+		{w: $elm$core$Set$empty, x: _List_Nil, y: _List_Nil, K: 0, E: 0, F: 10, B: $elm$core$Set$empty},
 		$author$project$Main$generateSample(100));
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -5530,14 +5530,7 @@ var $author$project$Main$showLog = function (speed) {
 		},
 		$elm$core$Process$sleep(speed));
 };
-var $elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
-		}
-	});
+var $elm$core$Basics$ge = _Utils_ge;
 var $elm$core$List$drop = F2(
 	function (n, list) {
 		drop:
@@ -5559,7 +5552,6 @@ var $elm$core$List$drop = F2(
 			}
 		}
 	});
-var $elm$core$Basics$ge = _Utils_ge;
 var $elm$core$List$head = function (list) {
 	if (list.b) {
 		var x = list.a;
@@ -5574,36 +5566,16 @@ var $elm_community$list_extra$List$Extra$getAt = F2(
 		return (idx < 0) ? $elm$core$Maybe$Nothing : $elm$core$List$head(
 			A2($elm$core$List$drop, idx, xs));
 	});
-var $elm$core$Tuple$second = function (_v0) {
-	var y = _v0.b;
-	return y;
-};
-var $elm_community$list_extra$List$Extra$indexedFoldr = F3(
-	function (func, acc, list) {
-		var step = F2(
-			function (x, _v0) {
-				var i = _v0.a;
-				var thisAcc = _v0.b;
-				return _Utils_Tuple2(
-					i - 1,
-					A3(func, i, x, thisAcc));
-			});
-		return A3(
-			$elm$core$List$foldr,
-			step,
-			_Utils_Tuple2(
-				$elm$core$List$length(list) - 1,
-				acc),
-			list).b;
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
 	});
-var $elm_community$list_extra$List$Extra$removeIfIndex = function (predicate) {
-	return A2(
-		$elm_community$list_extra$List$Extra$indexedFoldr,
-		F3(
-			function (index, item, acc) {
-				return predicate(index) ? acc : A2($elm$core$List$cons, item, acc);
-			}),
-		_List_Nil);
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
 var $elm$core$List$takeReverse = F3(
 	function (n, list, kept) {
@@ -5731,6 +5703,68 @@ var $elm$core$List$take = F2(
 	function (n, list) {
 		return A3($elm$core$List$takeFast, 0, n, list);
 	});
+var $elm_community$list_extra$List$Extra$splitAt = F2(
+	function (n, xs) {
+		return _Utils_Tuple2(
+			A2($elm$core$List$take, n, xs),
+			A2($elm$core$List$drop, n, xs));
+	});
+var $elm_community$list_extra$List$Extra$uncons = function (list) {
+	if (!list.b) {
+		return $elm$core$Maybe$Nothing;
+	} else {
+		var first = list.a;
+		var rest = list.b;
+		return $elm$core$Maybe$Just(
+			_Utils_Tuple2(first, rest));
+	}
+};
+var $elm_community$list_extra$List$Extra$swapAt = F3(
+	function (index1, index2, l) {
+		swapAt:
+		while (true) {
+			if (_Utils_eq(index1, index2) || (index1 < 0)) {
+				return l;
+			} else {
+				if (_Utils_cmp(index1, index2) > 0) {
+					var $temp$index1 = index2,
+						$temp$index2 = index1,
+						$temp$l = l;
+					index1 = $temp$index1;
+					index2 = $temp$index2;
+					l = $temp$l;
+					continue swapAt;
+				} else {
+					var _v0 = A2($elm_community$list_extra$List$Extra$splitAt, index1, l);
+					var part1 = _v0.a;
+					var tail1 = _v0.b;
+					var _v1 = A2($elm_community$list_extra$List$Extra$splitAt, index2 - index1, tail1);
+					var head2 = _v1.a;
+					var tail2 = _v1.b;
+					var _v2 = _Utils_Tuple2(
+						$elm_community$list_extra$List$Extra$uncons(head2),
+						$elm_community$list_extra$List$Extra$uncons(tail2));
+					if ((!_v2.a.$) && (!_v2.b.$)) {
+						var _v3 = _v2.a.a;
+						var value1 = _v3.a;
+						var part2 = _v3.b;
+						var _v4 = _v2.b.a;
+						var value2 = _v4.a;
+						var part3 = _v4.b;
+						return $elm$core$List$concat(
+							_List_fromArray(
+								[
+									part1,
+									A2($elm$core$List$cons, value2, part2),
+									A2($elm$core$List$cons, value1, part3)
+								]));
+					} else {
+						return l;
+					}
+				}
+			}
+		}
+	});
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (!maybe.$) {
@@ -5740,7 +5774,112 @@ var $elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var $author$project$Main$quicksortHelper = F4(
+var $author$project$Bubblesort$bubblesortHelper = F4(
+	function (list, element, end, log) {
+		bubblesortHelper:
+		while (true) {
+			if (end <= 1) {
+				return log;
+			} else {
+				if (_Utils_cmp(element, end) > -1) {
+					var $temp$list = list,
+						$temp$element = 1,
+						$temp$end = end - 1,
+						$temp$log = log;
+					list = $temp$list;
+					element = $temp$element;
+					end = $temp$end;
+					log = $temp$log;
+					continue bubblesortHelper;
+				} else {
+					var _v0 = A2(
+						$elm$core$Maybe$withDefault,
+						_Utils_Tuple2(-1, -1),
+						A2($elm_community$list_extra$List$Extra$getAt, element, list));
+					var thisId = _v0.a;
+					var thisValue = _v0.b;
+					var _v1 = A2(
+						$elm$core$Maybe$withDefault,
+						_Utils_Tuple2(-1, -1),
+						A2($elm_community$list_extra$List$Extra$getAt, element - 1, list));
+					var prevId = _v1.a;
+					var prevValue = _v1.b;
+					if (_Utils_cmp(thisValue, prevValue) < 0) {
+						var nextList = A3($elm_community$list_extra$List$Extra$swapAt, element, element - 1, list);
+						var $temp$list = nextList,
+							$temp$element = element + 1,
+							$temp$end = end,
+							$temp$log = _Utils_ap(
+							log,
+							_List_fromArray(
+								[
+									{W: thisId, ag: prevId, ao: nextList}
+								]));
+						list = $temp$list;
+						element = $temp$element;
+						end = $temp$end;
+						log = $temp$log;
+						continue bubblesortHelper;
+					} else {
+						var $temp$list = list,
+							$temp$element = element + 1,
+							$temp$end = end,
+							$temp$log = _Utils_ap(
+							log,
+							_List_fromArray(
+								[
+									{W: thisId, ag: prevId, ao: list}
+								]));
+						list = $temp$list;
+						element = $temp$element;
+						end = $temp$end;
+						log = $temp$log;
+						continue bubblesortHelper;
+					}
+				}
+			}
+		}
+	});
+var $author$project$Bubblesort$bubblesort = function (list) {
+	return A4(
+		$author$project$Bubblesort$bubblesortHelper,
+		list,
+		1,
+		$elm$core$List$length(list),
+		_List_Nil);
+};
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $elm_community$list_extra$List$Extra$indexedFoldr = F3(
+	function (func, acc, list) {
+		var step = F2(
+			function (x, _v0) {
+				var i = _v0.a;
+				var thisAcc = _v0.b;
+				return _Utils_Tuple2(
+					i - 1,
+					A3(func, i, x, thisAcc));
+			});
+		return A3(
+			$elm$core$List$foldr,
+			step,
+			_Utils_Tuple2(
+				$elm$core$List$length(list) - 1,
+				acc),
+			list).b;
+	});
+var $elm_community$list_extra$List$Extra$removeIfIndex = function (predicate) {
+	return A2(
+		$elm_community$list_extra$List$Extra$indexedFoldr,
+		F3(
+			function (index, item, acc) {
+				return predicate(index) ? acc : A2($elm$core$List$cons, item, acc);
+			}),
+		_List_Nil);
+};
+var $author$project$Quicksort$quicksortHelper = F4(
 	function (list, element, pivots, log) {
 		quicksortHelper:
 		while (true) {
@@ -5822,7 +5961,7 @@ var $author$project$Main$quicksortHelper = F4(
 								log,
 								_List_fromArray(
 									[
-										{K: elId, L: pivId, M: newList}
+										{W: elId, ag: pivId, ao: newList}
 									]));
 							var $temp$list = newList,
 								$temp$element = element + 1,
@@ -5838,7 +5977,7 @@ var $author$project$Main$quicksortHelper = F4(
 							continue quicksortHelper;
 						} else {
 							return A4(
-								$author$project$Main$quicksortHelper,
+								$author$project$Quicksort$quicksortHelper,
 								list,
 								element + 1,
 								pivots,
@@ -5847,7 +5986,7 @@ var $author$project$Main$quicksortHelper = F4(
 									log,
 									_List_fromArray(
 										[
-											{K: elId, L: pivId, M: list}
+											{W: elId, ag: pivId, ao: list}
 										])));
 						}
 					}
@@ -5855,9 +5994,9 @@ var $author$project$Main$quicksortHelper = F4(
 			}
 		}
 	});
-var $author$project$Main$quicksort = function (list) {
+var $author$project$Quicksort$quicksort = function (list) {
 	return A4(
-		$author$project$Main$quicksortHelper,
+		$author$project$Quicksort$quicksortHelper,
 		list,
 		1,
 		_List_fromArray(
@@ -5870,7 +6009,11 @@ var $author$project$Main$quicksort = function (list) {
 		_List_Nil);
 };
 var $author$project$Main$sortingFunction = function (sorter) {
-	return $author$project$Main$quicksort;
+	if (!sorter) {
+		return $author$project$Quicksort$quicksort;
+	} else {
+		return $author$project$Bubblesort$bubblesort;
+	}
 };
 var $author$project$Main$update = F2(
 	function (msg, model) {
@@ -5880,7 +6023,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{w: $elm$core$Set$empty, x: _List_Nil, B: $elm$core$Set$empty}),
-					$author$project$Main$generateSample(model.N));
+					$author$project$Main$generateSample(model.K));
 			case 1:
 				var sample = msg.a;
 				return _Utils_Tuple2(
@@ -5899,7 +6042,7 @@ var $author$project$Main$update = F2(
 									1,
 									$elm$core$List$length(sample)),
 								sample),
-							N: $elm$core$List$length(sample)
+							K: $elm$core$List$length(sample)
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
@@ -5941,12 +6084,12 @@ var $author$project$Main$update = F2(
 							{
 								w: $elm$core$Set$fromList(
 									_List_fromArray(
-										[l.L])),
+										[l.ag])),
 								x: ls,
-								y: l.M,
+								y: l.ao,
 								B: $elm$core$Set$fromList(
 									_List_fromArray(
-										[l.K]))
+										[l.W]))
 							}),
 						$author$project$Main$showLog(model.F));
 				}
@@ -5961,8 +6104,9 @@ var $author$project$Main$ChangeSpeed = function (a) {
 var $author$project$Main$Reset = {$: 0};
 var $author$project$Main$Sort = {$: 4};
 var $elm$html$Html$a = _VirtualDom_node('a');
+var $author$project$Sorter$Bubblesort = 1;
 var $author$project$Main$allSorters = _List_fromArray(
-	[0]);
+	[0, 1]);
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -6074,7 +6218,11 @@ var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
 var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
 var $author$project$Main$nameOf = function (sorter) {
-	return 'Quicksort';
+	if (!sorter) {
+		return 'Quicksort';
+	} else {
+		return 'Bubblesort';
+	}
 };
 var $elm$html$Html$nav = _VirtualDom_node('nav');
 var $elm$virtual_dom$VirtualDom$node = function (tag) {
@@ -6148,7 +6296,7 @@ var $author$project$Main$view = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Attributes$rel('stylesheet'),
-						$elm$html$Html$Attributes$href('/styles/main.css')
+						$elm$html$Html$Attributes$href('../styles/main.css')
 					]),
 				_List_Nil),
 				A2(
@@ -6201,14 +6349,14 @@ var $author$project$Main$view = function (model) {
 										_List_fromArray(
 											[
 												$elm$html$Html$Attributes$type_('range'),
-												$elm$html$Html$Attributes$min('5'),
-												$elm$html$Html$Attributes$max('200'),
+												$elm$html$Html$Attributes$min('1'),
+												$elm$html$Html$Attributes$max('500'),
 												$elm$html$Html$Events$onInput(
 												function (input) {
 													return $author$project$Main$ChangeSpeed(
-														A2(
+														500 / A2(
 															$elm$core$Maybe$withDefault,
-															10,
+															1,
 															$elm$core$String$toFloat(input)));
 												})
 											]),
