@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.Q.D === region.X.D)
+	if (region.Q.F === region.X.F)
 	{
-		return 'on line ' + region.Q.D;
+		return 'on line ' + region.Q.F;
 	}
-	return 'on lines ' + region.Q.D + ' through ' + region.X.D;
+	return 'on lines ' + region.Q.F + ' through ' + region.X.F;
 }
 
 
@@ -4438,6 +4438,9 @@ function _Time_getZoneName()
 		callback(_Scheduler_succeed(name));
 	});
 }
+var $author$project$Main$LoadSession = function (a) {
+	return {$: 4, a: a};
+};
 var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
 var $elm$core$Basics$LT = 0;
@@ -5222,6 +5225,13 @@ var $elm$core$Task$perform = F2(
 	});
 var $elm$browser$Browser$document = _Browser_document;
 var $author$project$Sorter$Quicksort = 0;
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$json$Json$Encode$null = _Json_encodeNull;
+var $author$project$Main$doLoadSession = _Platform_outgoingPort(
+	'doLoadSession',
+	function ($) {
+		return $elm$json$Json$Encode$null;
+	});
 var $elm$core$Set$Set_elm_builtin = $elm$core$Basics$identity;
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
@@ -5396,11 +5406,20 @@ var $author$project$Main$generateSample = function (size) {
 };
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{w: $elm$core$Set$empty, x: _List_Nil, y: _List_Nil, K: 0, E: 0, F: 10, B: $elm$core$Set$empty},
-		$author$project$Main$generateSample(100));
+		{y: $elm$core$Set$empty, z: _List_Nil, A: _List_Nil, K: 0, v: 0, q: 10, D: $elm$core$Set$empty},
+		$elm$core$Platform$Cmd$batch(
+			_List_fromArray(
+				[
+					$author$project$Main$generateSample(50),
+					$author$project$Main$doLoadSession(0)
+				])));
 };
-var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$loadSession = _Platform_incomingPort('loadSession', $elm$json$Json$Decode$string);
+var $elm$json$Json$Decode$decodeString = _Json_runOnString;
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$float = _Json_decodeFloat;
+var $elm$json$Json$Encode$float = _Json_wrap;
 var $elm$core$Dict$Black = 1;
 var $elm$core$Dict$RBNode_elm_builtin = F5(
 	function (a, b, c, d, e) {
@@ -5518,9 +5537,30 @@ var $elm$core$Set$insert = F2(
 var $elm$core$Set$fromList = function (list) {
 	return A3($elm$core$List$foldl, $elm$core$Set$insert, $elm$core$Set$empty, list);
 };
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $author$project$Main$nameOf = function (sorter) {
+	if (!sorter) {
+		return 'Quicksort';
+	} else {
+		return 'Bubblesort';
+	}
+};
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Main$ShowLog = {$: 5};
+var $elm$json$Json$Encode$object = function (pairs) {
+	return _Json_wrap(
+		A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v0, obj) {
+					var k = _v0.a;
+					var v = _v0.b;
+					return A3(_Json_addField, k, v, obj);
+				}),
+			_Json_emptyObject(0),
+			pairs));
+};
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $author$project$Main$saveSession = _Platform_outgoingPort('saveSession', $elm$json$Json$Encode$string);
+var $author$project$Main$ShowLog = {$: 6};
 var $elm$core$Process$sleep = _Process_sleep;
 var $author$project$Main$showLog = function (speed) {
 	return A2(
@@ -6015,6 +6055,26 @@ var $author$project$Main$sortingFunction = function (sorter) {
 		return $author$project$Bubblesort$bubblesort;
 	}
 };
+var $author$project$Sorter$Bubblesort = 1;
+var $author$project$Main$toSorter = function (name) {
+	switch (name) {
+		case 'Quicksort':
+			return 0;
+		case 'Bubblesort':
+			return 1;
+		default:
+			return 0;
+	}
+};
+var $elm$core$Result$withDefault = F2(
+	function (def, result) {
+		if (!result.$) {
+			var a = result.a;
+			return a;
+		} else {
+			return def;
+		}
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6022,7 +6082,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{w: $elm$core$Set$empty, x: _List_Nil, B: $elm$core$Set$empty}),
+						{y: $elm$core$Set$empty, z: _List_Nil, D: $elm$core$Set$empty}),
 					$author$project$Main$generateSample(model.K));
 			case 1:
 				var sample = msg.a;
@@ -6030,7 +6090,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							y: A3(
+							A: A3(
 								$elm$core$List$map2,
 								function (a) {
 									return function (b) {
@@ -6047,33 +6107,83 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 2:
 				var sorter = msg.a;
+				var session = A2(
+					$elm$json$Json$Encode$encode,
+					0,
+					$elm$json$Json$Encode$object(
+						_List_fromArray(
+							[
+								_Utils_Tuple2(
+								'speed',
+								$elm$json$Json$Encode$float(model.q)),
+								_Utils_Tuple2(
+								'sorter',
+								$elm$json$Json$Encode$string(
+									$author$project$Main$nameOf(sorter)))
+							])));
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{E: sorter}),
-					$elm$core$Platform$Cmd$none);
+						{v: sorter}),
+					$author$project$Main$saveSession(session));
 			case 3:
 				var speed = msg.a;
+				var session = A2(
+					$elm$json$Json$Encode$encode,
+					0,
+					$elm$json$Json$Encode$object(
+						_List_fromArray(
+							[
+								_Utils_Tuple2(
+								'speed',
+								$elm$json$Json$Encode$float(speed)),
+								_Utils_Tuple2(
+								'sorter',
+								$elm$json$Json$Encode$string(
+									$author$project$Main$nameOf(model.v)))
+							])));
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{F: speed}),
-					$elm$core$Platform$Cmd$none);
+						{q: speed}),
+					$author$project$Main$saveSession(session));
 			case 4:
+				var value = msg.a;
+				var speed = A2(
+					$elm$core$Result$withDefault,
+					10,
+					A2(
+						$elm$json$Json$Decode$decodeString,
+						A2($elm$json$Json$Decode$field, 'speed', $elm$json$Json$Decode$float),
+						value));
+				var sorter = $author$project$Main$toSorter(
+					A2(
+						$elm$core$Result$withDefault,
+						'',
+						A2(
+							$elm$json$Json$Decode$decodeString,
+							A2($elm$json$Json$Decode$field, 'sorter', $elm$json$Json$Decode$string),
+							value)));
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{v: sorter, q: speed}),
+					$elm$core$Platform$Cmd$none);
+			case 5:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							x: A2($author$project$Main$sortingFunction, model.E, model.y)
+							z: A2($author$project$Main$sortingFunction, model.v, model.A)
 						}),
-					$author$project$Main$showLog(model.F));
+					$author$project$Main$showLog(model.q));
 			default:
-				var _v1 = model.x;
+				var _v1 = model.z;
 				if (!_v1.b) {
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{w: $elm$core$Set$empty, B: $elm$core$Set$empty}),
+							{y: $elm$core$Set$empty, D: $elm$core$Set$empty}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					var l = _v1.a;
@@ -6082,16 +6192,16 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								w: $elm$core$Set$fromList(
+								y: $elm$core$Set$fromList(
 									_List_fromArray(
 										[l.ag])),
-								x: ls,
-								y: l.ao,
-								B: $elm$core$Set$fromList(
+								z: ls,
+								A: l.ao,
+								D: $elm$core$Set$fromList(
 									_List_fromArray(
 										[l.W]))
 							}),
-						$author$project$Main$showLog(model.F));
+						$author$project$Main$showLog(model.q));
 				}
 		}
 	});
@@ -6102,12 +6212,11 @@ var $author$project$Main$ChangeSpeed = function (a) {
 	return {$: 3, a: a};
 };
 var $author$project$Main$Reset = {$: 0};
-var $author$project$Main$Sort = {$: 4};
+var $author$project$Main$Sort = {$: 5};
 var $elm$html$Html$a = _VirtualDom_node('a');
-var $author$project$Sorter$Bubblesort = 1;
 var $author$project$Main$allSorters = _List_fromArray(
 	[0, 1]);
-var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
 		return A2(
@@ -6191,18 +6300,18 @@ var $author$project$Main$computeAttributes = F2(
 	function (model, _v0) {
 		var index = _v0.a;
 		var value = _v0.b;
-		return A2($elm$core$Set$member, index, model.w) ? _Utils_ap(
+		return A2($elm$core$Set$member, index, model.y) ? _Utils_ap(
 			$author$project$Main$standardAttributes(
 				_Utils_Tuple2(index, value)),
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$class('green')
-				])) : (A2($elm$core$Set$member, index, model.B) ? _Utils_ap(
+					$elm$html$Html$Attributes$class('highlighted--primary')
+				])) : (A2($elm$core$Set$member, index, model.D) ? _Utils_ap(
 			$author$project$Main$standardAttributes(
 				_Utils_Tuple2(index, value)),
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$class('yellow')
+					$elm$html$Html$Attributes$class('highlighted--secondary')
 				])) : $author$project$Main$standardAttributes(
 			_Utils_Tuple2(index, value)));
 	});
@@ -6217,13 +6326,6 @@ var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
 var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
-var $author$project$Main$nameOf = function (sorter) {
-	if (!sorter) {
-		return 'Quicksort';
-	} else {
-		return 'Bubblesort';
-	}
-};
 var $elm$html$Html$nav = _VirtualDom_node('nav');
 var $elm$virtual_dom$VirtualDom$node = function (tag) {
 	return _VirtualDom_node(
@@ -6260,12 +6362,10 @@ var $elm$html$Html$Events$stopPropagationOn = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
 	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
 		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
 	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
 var $elm$html$Html$Events$targetValue = A2(
 	$elm$json$Json$Decode$at,
 	_List_fromArray(
@@ -6281,11 +6381,14 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
 };
 var $elm$html$Html$Attributes$rel = _VirtualDom_attribute('rel');
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$core$String$toFloat = _String_toFloat;
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Main$view = function (model) {
 	return {
 		ay: _List_fromArray(
@@ -6312,17 +6415,16 @@ var $author$project$Main$view = function (model) {
 							function (item) {
 								return A2(
 									$elm$html$Html$li,
-									_Utils_eq(item, model.E) ? _List_fromArray(
+									_Utils_eq(item, model.v) ? _List_fromArray(
 										[
 											$elm$html$Html$Attributes$class('selected')
 										]) : _List_Nil,
 									_List_fromArray(
 										[
 											A2(
-											$elm$html$Html$a,
+											$elm$html$Html$button,
 											_List_fromArray(
 												[
-													$elm$html$Html$Attributes$href('#'),
 													$elm$html$Html$Events$onClick(
 													$author$project$Main$ChangeSorter(item))
 												]),
@@ -6350,7 +6452,9 @@ var $author$project$Main$view = function (model) {
 											[
 												$elm$html$Html$Attributes$type_('range'),
 												$elm$html$Html$Attributes$min('1'),
-												$elm$html$Html$Attributes$max('500'),
+												$elm$html$Html$Attributes$max('100'),
+												$elm$html$Html$Attributes$value(
+												$elm$core$String$fromFloat(500 / model.q)),
 												$elm$html$Html$Events$onInput(
 												function (input) {
 													return $author$project$Main$ChangeSpeed(
@@ -6368,10 +6472,9 @@ var $author$project$Main$view = function (model) {
 								_List_fromArray(
 									[
 										A2(
-										$elm$html$Html$a,
+										$elm$html$Html$button,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('#'),
 												$elm$html$Html$Events$onClick($author$project$Main$Sort)
 											]),
 										_List_fromArray(
@@ -6385,10 +6488,9 @@ var $author$project$Main$view = function (model) {
 								_List_fromArray(
 									[
 										A2(
-										$elm$html$Html$a,
+										$elm$html$Html$button,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('#'),
 												$elm$html$Html$Events$onClick($author$project$Main$Reset)
 											]),
 										_List_fromArray(
@@ -6420,7 +6522,35 @@ var $author$project$Main$view = function (model) {
 									A2($author$project$Main$computeAttributes, model, sample),
 									_List_Nil);
 							},
-							model.y))
+							model.A))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('cc')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$span,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text('by ')
+							])),
+						A2(
+						$elm$html$Html$a,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$target('_blank'),
+								$elm$html$Html$Attributes$rel('noopener noreferrer'),
+								$elm$html$Html$Attributes$href('https://github.com/wiebecommajonas')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('wiebecommajonas')
+							]))
 					]))
 			]),
 		aL: 'Sorting algorithms'
@@ -6430,7 +6560,7 @@ var $author$project$Main$main = $elm$browser$Browser$document(
 	{
 		aE: $author$project$Main$init,
 		aK: function (_v0) {
-			return $elm$core$Platform$Sub$none;
+			return $author$project$Main$loadSession($author$project$Main$LoadSession);
 		},
 		aM: $author$project$Main$update,
 		aN: $author$project$Main$view

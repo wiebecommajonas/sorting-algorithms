@@ -1,4 +1,12 @@
+:root {
+    --clr-prm: #FA2742;
+    --clr-background-prm: #E8EAE3;
+    --clr-background-scd: #ffffffee;
+    --clr-foreground: #373833;
+}
+
 html, body {
+    background-color: var(--clr-background-prm);
     position: relative;
     height: 100%;
     width: 100%;
@@ -11,11 +19,26 @@ html, body {
 }
 
 nav {
+    position: relative;
     display: flex;
     flex-flow: row;
     justify-content: space-between;
 
-    background-color: aliceblue;
+    z-index: 0;
+}
+
+nav::before {
+    --blur-radius: 20px;
+    content: '';
+    position: absolute;
+    top: calc(-1 * var(--blur-radius));
+    left: calc(-1 * var(--blur-radius));
+    right: calc(-1 * var(--blur-radius));
+    bottom: calc( -1 * var(--blur-radius));
+    z-index: -1;
+
+    background-color: var(--clr-background-scd);
+    filter: blur(var(--blur-radius));
 }
 
 nav ul {
@@ -30,13 +53,45 @@ nav li {
     margin-inline: 1.5em;
 }
 
-nav a {
-    text-decoration: none;
-    color: black;
+nav button {
+    color: var(--clr-foreground);
+    font-size: 1em;
+    cursor: pointer;
+
+    background-color: transparent;
+    border: none;
 }
 
-.selected {
+nav input[type=range] {
+    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    width: 100%; /* Specific width is required for Firefox. */
+    background: transparent; /* Otherwise white in Chrome */
+}
+
+nav input[type=range]:focus {
+    outline: none;
+}
+
+nav input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    cursor: pointer;
+    border: 1px solid #000000;
+    height: 1.5em;
+    width: 0.75em;
+    border-radius: 0.25em;
+    background: #ffffff;
+    margin-top: -0.5em; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+}
+
+nav input[type=range]::-webkit-slider-runnable-track {
+    height: 0.5em;
+    border-radius: 0.25em;
+    background-color: var(--clr-foreground);
+}
+
+.selected > button {
     font-weight: 700;
+    color: var(--clr-prm);
 }
 
 .sample-frame {
@@ -59,16 +114,28 @@ nav a {
 }
 
 .sample {
-    background-color: aqua;
-    border: solid 1px black;
+    background-color: var(--clr-foreground);
+    border: solid 1px var(--clr-background-prm);
     width: 0.5em;
 }
 
 
-.green {
-    background-color: greenyellow;
+.highlighted--primary {
+    background-color: var(--clr-prm);
 }
 
-.yellow {
+.highlighted--secondary {
     background-color: yellow;
+}
+
+.cc {
+    font-size: small;
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    color: var(--clr-foreground);
+}
+
+.cc > a {
+    color: var(--clr-foreground);
 }

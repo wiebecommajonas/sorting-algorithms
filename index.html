@@ -13,9 +13,23 @@
 
     <script src="elm.js"></script>
     <script>
+
+        const STORAGE_KEY = 'SORTER_CONFIG'
         var app = Elm.Main.init({
             node: document.getElementById("elm-app")
-        }); 
+        });
+
+        app.ports.saveSession.subscribe(function (value) {
+            console.log(value)
+            sessionStorage.setItem(STORAGE_KEY, value);
+        });
+
+        app.ports.doLoadSession.subscribe(function () {
+            const item = sessionStorage.getItem(STORAGE_KEY);
+            if (item) {
+                app.ports.loadSession.send(sessionStorage.getItem(STORAGE_KEY));
+            }
+        });
     </script>
 
 </body>

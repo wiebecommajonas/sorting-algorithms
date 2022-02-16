@@ -1,17 +1,29 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Browser
 import Bubblesort exposing (bubblesort)
 import Dict exposing (update)
 import Html exposing (div, text)
-import Html.Attributes exposing (class, href, id, style, type_)
+import Html.Attributes exposing (class, href, id, rel, style, target, type_, value)
 import Html.Events exposing (onClick, onInput)
+import Json.Decode as Dec
+import Json.Encode as Enc
 import Process
 import Quicksort exposing (quicksort)
 import Random
+import Result exposing (withDefault)
 import Set exposing (Set)
 import Sorter exposing (Log, Sorter, SortingFunction, SortingList)
 import Task
+
+
+port saveSession : String -> Cmd msg
+
+
+port loadSession : (String -> msg) -> Sub msg
+
+
+port doLoadSession : () -> Cmd msg
 
 
 type Msg
@@ -19,6 +31,7 @@ type Msg
     | NewSample (List Float)
     | ChangeSorter Sorter
     | ChangeSpeed Float
+    | LoadSession String
     | Sort
     | ShowLog
 
@@ -36,6 +49,19 @@ nameOf sorter =
 
         Sorter.Bubblesort ->
             "Bubblesort"
+
+
+toSorter : String -> Sorter
+toSorter name =
+    case name of
+        "Quicksort" ->
+            Sorter.Quicksort
+
+        "Bubblesort" ->
+            Sorter.Bubblesort
+
+        _ ->
+            Sorter.Quicksort
 
 
 sortingFunction : Sorter -> SortingFunction
@@ -74,7 +100,7 @@ init _ =
       , yellow = Set.empty
       , log = []
       }
-    , generateSample 100
+    , Cmd.batch [ generateSample 50, doLoadSession () ]
     )
 
 
@@ -94,10 +120,28 @@ update msg model =
             ( { model | sampleSize = List.length sample, sample = List.map2 (\a -> \b -> ( a, b )) (List.range 1 (List.length sample)) sample }, Cmd.none )
 
         ChangeSorter sorter ->
-            ( { model | sorter = sorter }, Cmd.none )
+            let
+                session =
+                    Enc.object [ ( "speed", Enc.float model.speed ), ( "sorter", Enc.string <| nameOf sorter ) ] |> Enc.encode 0
+            in
+            ( { model | sorter = sorter }, saveSession session )
 
         ChangeSpeed speed ->
-            ( { model | speed = speed }, Cmd.none )
+            let
+                session =
+                    Enc.object [ ( "speed", Enc.float speed ), ( "sorter", Enc.string <| nameOf model.sorter ) ] |> Enc.encode 0
+            in
+            ( { model | speed = speed }, saveSession session )
+
+        LoadSession value ->
+            let
+                speed =
+                    Dec.decodeString (Dec.field "speed" Dec.float) value |> withDefault 10
+
+                sorter =
+                    Dec.decodeString (Dec.field "sorter" Dec.string) value |> withDefault "" |> toSorter
+            in
+            ( { model | speed = speed, sorter = sorter }, Cmd.none )
 
         Sort ->
             ( { model | log = sortingFunction model.sorter model.sample }, showLog model.speed )
@@ -119,10 +163,10 @@ standardAttributes ( index, value ) =
 computeAttributes : Model -> ( Int, Float ) -> List (Html.Attribute msg)
 computeAttributes model ( index, value ) =
     if Set.member index model.green then
-        standardAttributes ( index, value ) ++ [ class "green" ]
+        standardAttributes ( index, value ) ++ [ class "highlighted--primary" ]
 
     else if Set.member index model.yellow then
-        standardAttributes ( index, value ) ++ [ class "yellow" ]
+        standardAttributes ( index, value ) ++ [ class "highlighted--secondary" ]
 
     else
         standardAttributes ( index, value )
@@ -144,19 +188,20 @@ view model =
                              else
                                 []
                             )
-                            [ Html.a [ href "#", onClick <| ChangeSorter item ] [ text <| nameOf item ] ]
+                            [ Html.button [ onClick <| ChangeSorter item ] [ text <| nameOf item ] ]
                     )
                     allSorters
                 )
             , Html.ul []
-                [ Html.li [] [ Html.input [ type_ "range", Html.Attributes.min "1", Html.Attributes.max "500", onInput <| \input -> ChangeSpeed (String.toFloat input |> Maybe.withDefault 1 |> (/) 500) ] [] ]
-                , Html.li [] [ Html.a [ href "#", onClick Sort ] [ text "Sort" ] ]
-                , Html.li [] [ Html.a [ href "#", onClick Reset ] [ text "Reset" ] ]
+                [ Html.li [] [ Html.input [ type_ "range", Html.Attributes.min "1", Html.Attributes.max "100", value <| String.fromFloat <| 500 / model.speed, onInput <| \input -> ChangeSpeed (String.toFloat input |> Maybe.withDefault 1 |> (/) 500) ] [] ]
+                , Html.li [] [ Html.button [ onClick Sort ] [ text "Sort" ] ]
+                , Html.li [] [ Html.button [ onClick Reset ] [ text "Reset" ] ]
                 ]
             ]
         , Html.div [ class "sample-frame" ]
-            [ Html.div [ class "sample__wrapper" ] (List.map (\sample -> div (computeAttributes model sample) []) model.sample)
-            ]
+            [ Html.div [ class "sample__wrapper" ] (List.map (\sample -> div (computeAttributes model sample) []) model.sample) ]
+        , Html.div [ class "cc" ]
+            [ Html.span [] [ text "by " ], Html.a [ target "_blank", rel "noopener noreferrer", href "https://github.com/wiebecommajonas" ] [ text "wiebecommajonas" ] ]
         ]
     }
 
@@ -167,5 +212,5 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = \_ -> loadSession LoadSession
         }
