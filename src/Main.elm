@@ -12,8 +12,9 @@ import Process
 import Quicksort exposing (quicksort)
 import Random
 import Result exposing (withDefault)
+import Selectionsort exposing (selectionsort)
 import Set exposing (Set)
-import Sorter exposing (Log, Sorter, SortingFunction, SortingList)
+import Sorter exposing (Log, Sorter, SortingFunction, SortingList, allSorters, nameOf, toSorter)
 import Task
 
 
@@ -36,34 +37,6 @@ type Msg
     | ShowLog
 
 
-allSorters : List Sorter
-allSorters =
-    [ Sorter.Quicksort, Sorter.Bubblesort ]
-
-
-nameOf : Sorter -> String
-nameOf sorter =
-    case sorter of
-        Sorter.Quicksort ->
-            "Quicksort"
-
-        Sorter.Bubblesort ->
-            "Bubblesort"
-
-
-toSorter : String -> Sorter
-toSorter name =
-    case name of
-        "Quicksort" ->
-            Sorter.Quicksort
-
-        "Bubblesort" ->
-            Sorter.Bubblesort
-
-        _ ->
-            Sorter.Quicksort
-
-
 sortingFunction : Sorter -> SortingFunction
 sortingFunction sorter =
     case sorter of
@@ -73,13 +46,16 @@ sortingFunction sorter =
         Sorter.Bubblesort ->
             bubblesort
 
+        Sorter.Selectionsort ->
+            selectionsort
+
 
 type alias Model =
     { sampleSize : Int
     , sample : SortingList
     , speed : Float
-    , green : Set Int
-    , yellow : Set Int
+    , primary : Set Int
+    , secondary : Set Int
     , sorter : Sorter
     , log : List Log
     }
@@ -96,8 +72,8 @@ init _ =
       , sample = []
       , speed = 10
       , sorter = Sorter.Quicksort
-      , green = Set.empty
-      , yellow = Set.empty
+      , primary = Set.empty
+      , secondary = Set.empty
       , log = []
       }
     , Cmd.batch [ generateSample 50, doLoadSession () ]
@@ -114,7 +90,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Reset ->
-            ( { model | green = Set.empty, yellow = Set.empty, log = [] }, generateSample model.sampleSize )
+            ( { model | primary = Set.empty, secondary = Set.empty, log = [] }, generateSample model.sampleSize )
 
         NewSample sample ->
             ( { model | sampleSize = List.length sample, sample = List.map2 (\a -> \b -> ( a, b )) (List.range 1 (List.length sample)) sample }, Cmd.none )
@@ -149,10 +125,10 @@ update msg model =
         ShowLog ->
             case model.log of
                 [] ->
-                    ( { model | yellow = Set.empty, green = Set.empty }, Cmd.none )
+                    ( { model | secondary = Set.empty, primary = Set.empty }, Cmd.none )
 
                 l :: ls ->
-                    ( { model | sample = l.result, green = Set.fromList [ l.pivot ], yellow = Set.fromList [ l.element ], log = ls }, showLog model.speed )
+                    ( { model | sample = l.result, primary = Set.fromList [ l.pivot ], secondary = l.elements, log = ls }, showLog model.speed )
 
 
 standardAttributes : ( Int, Float ) -> List (Html.Attribute msg)
@@ -162,10 +138,10 @@ standardAttributes ( index, value ) =
 
 computeAttributes : Model -> ( Int, Float ) -> List (Html.Attribute msg)
 computeAttributes model ( index, value ) =
-    if Set.member index model.green then
+    if Set.member index model.primary then
         standardAttributes ( index, value ) ++ [ class "highlighted--primary" ]
 
-    else if Set.member index model.yellow then
+    else if Set.member index model.secondary then
         standardAttributes ( index, value ) ++ [ class "highlighted--secondary" ]
 
     else

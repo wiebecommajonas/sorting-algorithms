@@ -1,6 +1,7 @@
 module Quicksort exposing (quicksort)
 
 import List.Extra
+import Set
 import Sorter exposing (Log, SortingList)
 
 
@@ -43,12 +44,12 @@ quicksortHelper list element pivots log =
                             List.take pivot list ++ ( elId, elValue ) :: List.drop pivot (List.Extra.removeIfIndex ((==) element) list)
 
                         newLog =
-                            List.append log [ { pivot = pivId, element = elId, result = newList } ]
+                            List.append log [ { pivot = pivId, elements = Set.fromList [ elId ], result = newList } ]
                     in
                     quicksortHelper newList (element + 1) (( pivot + 1, start, end ) :: ps) newLog
 
                 else
-                    quicksortHelper list (element + 1) pivots <| List.append log [ { pivot = pivId, element = elId, result = list } ]
+                    quicksortHelper list (element + 1) pivots <| List.append log [ { pivot = pivId, elements = Set.fromList [ elId ], result = list } ]
 
 
 quicksort : SortingList -> List Log

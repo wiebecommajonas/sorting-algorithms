@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aE,
-		impl.aM,
-		impl.aK,
+		impl.aF,
+		impl.aN,
+		impl.aL,
 		function() { return function() {} }
 	);
 });
@@ -3928,11 +3928,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aE,
-		impl.aM,
-		impl.aK,
+		impl.aF,
+		impl.aN,
+		impl.aL,
 		function(sendToApp, initialModel) {
-			var view = impl.aN;
+			var view = impl.aO;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3964,12 +3964,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aE,
-		impl.aM,
-		impl.aK,
+		impl.aF,
+		impl.aN,
+		impl.aL,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.P && impl.P(sendToApp)
-			var view = impl.aN;
+			var view = impl.aO;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3982,7 +3982,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aL) && (_VirtualDom_doc.title = title = doc.aL);
+				(title !== doc.aM) && (_VirtualDom_doc.title = title = doc.aM);
 			});
 		}
 	);
@@ -4038,8 +4038,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aG;
-	var onUrlRequest = impl.aH;
+	var onUrlChange = impl.aH;
+	var onUrlRequest = impl.aI;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -4069,13 +4069,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aE: function(flags)
+		aF: function(flags)
 		{
-			return A3(impl.aE, flags, _Browser_getUrl(), key);
+			return A3(impl.aF, flags, _Browser_getUrl(), key);
 		},
+		aO: impl.aO,
 		aN: impl.aN,
-		aM: impl.aM,
-		aK: impl.aK
+		aL: impl.aL
 	});
 }
 
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aC: 'hidden', az: 'visibilitychange' }
+		? { aD: 'hidden', az: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aC: 'mozHidden', az: 'mozvisibilitychange' }
+		? { aD: 'mozHidden', az: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aC: 'msHidden', az: 'msvisibilitychange' }
+		? { aD: 'msHidden', az: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aC: 'webkitHidden', az: 'webkitvisibilitychange' }
-		: { aC: 'hidden', az: 'visibilitychange' };
+		? { aD: 'webkitHidden', az: 'webkitvisibilitychange' }
+		: { aD: 'hidden', az: 'visibilitychange' };
 }
 
 
@@ -4316,7 +4316,7 @@ function _Browser_getElement(id)
 				at: _Browser_doc.documentElement.clientWidth,
 				_: _Browser_doc.documentElement.clientHeight
 			},
-			W: {
+			aB: {
 				au: x + rect.left,
 				av: y + rect.top,
 				at: rect.width,
@@ -5406,7 +5406,7 @@ var $author$project$Main$generateSample = function (size) {
 };
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{y: $elm$core$Set$empty, z: _List_Nil, A: _List_Nil, K: 0, v: 0, q: 10, D: $elm$core$Set$empty},
+		{y: _List_Nil, z: $elm$core$Set$empty, A: _List_Nil, K: 0, B: $elm$core$Set$empty, v: 0, q: 10},
 		$elm$core$Platform$Cmd$batch(
 			_List_fromArray(
 				[
@@ -5537,11 +5537,14 @@ var $elm$core$Set$insert = F2(
 var $elm$core$Set$fromList = function (list) {
 	return A3($elm$core$List$foldl, $elm$core$Set$insert, $elm$core$Set$empty, list);
 };
-var $author$project$Main$nameOf = function (sorter) {
-	if (!sorter) {
-		return 'Quicksort';
-	} else {
-		return 'Bubblesort';
+var $author$project$Sorter$nameOf = function (sorter) {
+	switch (sorter) {
+		case 0:
+			return 'Quicksort';
+		case 1:
+			return 'Bubblesort';
+		default:
+			return 'Selectionsort';
 	}
 };
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
@@ -5853,7 +5856,13 @@ var $author$project$Bubblesort$bubblesortHelper = F4(
 							log,
 							_List_fromArray(
 								[
-									{W: thisId, ag: prevId, ao: nextList}
+									{
+									W: $elm$core$Set$fromList(
+										_List_fromArray(
+											[thisId])),
+									ag: prevId,
+									ao: nextList
+								}
 								]));
 						list = $temp$list;
 						element = $temp$element;
@@ -5868,7 +5877,13 @@ var $author$project$Bubblesort$bubblesortHelper = F4(
 							log,
 							_List_fromArray(
 								[
-									{W: thisId, ag: prevId, ao: list}
+									{
+									W: $elm$core$Set$fromList(
+										_List_fromArray(
+											[thisId])),
+									ag: prevId,
+									ao: list
+								}
 								]));
 						list = $temp$list;
 						element = $temp$element;
@@ -6001,7 +6016,13 @@ var $author$project$Quicksort$quicksortHelper = F4(
 								log,
 								_List_fromArray(
 									[
-										{W: elId, ag: pivId, ao: newList}
+										{
+										W: $elm$core$Set$fromList(
+											_List_fromArray(
+												[elId])),
+										ag: pivId,
+										ao: newList
+									}
 									]));
 							var $temp$list = newList,
 								$temp$element = element + 1,
@@ -6026,7 +6047,13 @@ var $author$project$Quicksort$quicksortHelper = F4(
 									log,
 									_List_fromArray(
 										[
-											{W: elId, ag: pivId, ao: list}
+											{
+											W: $elm$core$Set$fromList(
+												_List_fromArray(
+													[elId])),
+											ag: pivId,
+											ao: list
+										}
 										])));
 						}
 					}
@@ -6048,20 +6075,112 @@ var $author$project$Quicksort$quicksort = function (list) {
 			]),
 		_List_Nil);
 };
+var $author$project$Selectionsort$selectionsortHelper = F5(
+	function (list, start, current, min, log) {
+		selectionsortHelper:
+		while (true) {
+			if (_Utils_cmp(
+				start,
+				$elm$core$List$length(list)) < 0) {
+				var _v0 = A2(
+					$elm$core$Maybe$withDefault,
+					_Utils_Tuple2(-1, -1),
+					A2($elm_community$list_extra$List$Extra$getAt, start, list));
+				var pivId = _v0.a;
+				var pivValue = _v0.b;
+				var _v1 = A2(
+					$elm$core$Maybe$withDefault,
+					_Utils_Tuple2(-1, -1),
+					A2($elm_community$list_extra$List$Extra$getAt, min, list));
+				var minId = _v1.a;
+				var minValue = _v1.b;
+				var _v2 = A2(
+					$elm$core$Maybe$withDefault,
+					_Utils_Tuple2(-1, -1),
+					A2($elm_community$list_extra$List$Extra$getAt, current, list));
+				var elId = _v2.a;
+				var elValue = _v2.b;
+				if (_Utils_cmp(
+					current,
+					$elm$core$List$length(list)) < 0) {
+					var newMin = (_Utils_cmp(elValue, minValue) < 0) ? current : min;
+					var $temp$list = list,
+						$temp$start = start,
+						$temp$current = current + 1,
+						$temp$min = newMin,
+						$temp$log = _Utils_ap(
+						log,
+						_List_fromArray(
+							[
+								{
+								W: $elm$core$Set$fromList(
+									_List_fromArray(
+										[minId, elId])),
+								ag: pivId,
+								ao: list
+							}
+							]));
+					list = $temp$list;
+					start = $temp$start;
+					current = $temp$current;
+					min = $temp$min;
+					log = $temp$log;
+					continue selectionsortHelper;
+				} else {
+					var newStart = start + 1;
+					var newList = (_Utils_cmp(minValue, pivValue) < 0) ? A3($elm_community$list_extra$List$Extra$swapAt, start, min, list) : list;
+					var newCurrent = newStart + 1;
+					var $temp$list = newList,
+						$temp$start = newStart,
+						$temp$current = newCurrent,
+						$temp$min = newCurrent,
+						$temp$log = _Utils_ap(
+						log,
+						_List_fromArray(
+							[
+								{
+								W: $elm$core$Set$fromList(
+									_List_fromArray(
+										[minId, elId])),
+								ag: pivId,
+								ao: newList
+							}
+							]));
+					list = $temp$list;
+					start = $temp$start;
+					current = $temp$current;
+					min = $temp$min;
+					log = $temp$log;
+					continue selectionsortHelper;
+				}
+			} else {
+				return log;
+			}
+		}
+	});
+var $author$project$Selectionsort$selectionsort = function (list) {
+	return A5($author$project$Selectionsort$selectionsortHelper, list, 0, 1, 1, _List_Nil);
+};
 var $author$project$Main$sortingFunction = function (sorter) {
-	if (!sorter) {
-		return $author$project$Quicksort$quicksort;
-	} else {
-		return $author$project$Bubblesort$bubblesort;
+	switch (sorter) {
+		case 0:
+			return $author$project$Quicksort$quicksort;
+		case 1:
+			return $author$project$Bubblesort$bubblesort;
+		default:
+			return $author$project$Selectionsort$selectionsort;
 	}
 };
 var $author$project$Sorter$Bubblesort = 1;
-var $author$project$Main$toSorter = function (name) {
+var $author$project$Sorter$Selectionsort = 2;
+var $author$project$Sorter$toSorter = function (name) {
 	switch (name) {
 		case 'Quicksort':
 			return 0;
 		case 'Bubblesort':
 			return 1;
+		case 'Selectionsort':
+			return 2;
 		default:
 			return 0;
 	}
@@ -6082,7 +6201,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{y: $elm$core$Set$empty, z: _List_Nil, D: $elm$core$Set$empty}),
+						{y: _List_Nil, z: $elm$core$Set$empty, B: $elm$core$Set$empty}),
 					$author$project$Main$generateSample(model.K));
 			case 1:
 				var sample = msg.a;
@@ -6119,7 +6238,7 @@ var $author$project$Main$update = F2(
 								_Utils_Tuple2(
 								'sorter',
 								$elm$json$Json$Encode$string(
-									$author$project$Main$nameOf(sorter)))
+									$author$project$Sorter$nameOf(sorter)))
 							])));
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -6140,7 +6259,7 @@ var $author$project$Main$update = F2(
 								_Utils_Tuple2(
 								'sorter',
 								$elm$json$Json$Encode$string(
-									$author$project$Main$nameOf(model.v)))
+									$author$project$Sorter$nameOf(model.v)))
 							])));
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -6156,7 +6275,7 @@ var $author$project$Main$update = F2(
 						$elm$json$Json$Decode$decodeString,
 						A2($elm$json$Json$Decode$field, 'speed', $elm$json$Json$Decode$float),
 						value));
-				var sorter = $author$project$Main$toSorter(
+				var sorter = $author$project$Sorter$toSorter(
 					A2(
 						$elm$core$Result$withDefault,
 						'',
@@ -6174,16 +6293,16 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							z: A2($author$project$Main$sortingFunction, model.v, model.A)
+							y: A2($author$project$Main$sortingFunction, model.v, model.A)
 						}),
 					$author$project$Main$showLog(model.q));
 			default:
-				var _v1 = model.z;
+				var _v1 = model.y;
 				if (!_v1.b) {
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{y: $elm$core$Set$empty, D: $elm$core$Set$empty}),
+							{z: $elm$core$Set$empty, B: $elm$core$Set$empty}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					var l = _v1.a;
@@ -6192,14 +6311,12 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								y: $elm$core$Set$fromList(
+								y: ls,
+								z: $elm$core$Set$fromList(
 									_List_fromArray(
 										[l.ag])),
-								z: ls,
 								A: l.ao,
-								D: $elm$core$Set$fromList(
-									_List_fromArray(
-										[l.W]))
+								B: l.W
 							}),
 						$author$project$Main$showLog(model.q));
 				}
@@ -6214,8 +6331,8 @@ var $author$project$Main$ChangeSpeed = function (a) {
 var $author$project$Main$Reset = {$: 0};
 var $author$project$Main$Sort = {$: 5};
 var $elm$html$Html$a = _VirtualDom_node('a');
-var $author$project$Main$allSorters = _List_fromArray(
-	[0, 1]);
+var $author$project$Sorter$allSorters = _List_fromArray(
+	[0, 1, 2]);
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -6300,13 +6417,13 @@ var $author$project$Main$computeAttributes = F2(
 	function (model, _v0) {
 		var index = _v0.a;
 		var value = _v0.b;
-		return A2($elm$core$Set$member, index, model.y) ? _Utils_ap(
+		return A2($elm$core$Set$member, index, model.z) ? _Utils_ap(
 			$author$project$Main$standardAttributes(
 				_Utils_Tuple2(index, value)),
 			_List_fromArray(
 				[
 					$elm$html$Html$Attributes$class('highlighted--primary')
-				])) : (A2($elm$core$Set$member, index, model.D) ? _Utils_ap(
+				])) : (A2($elm$core$Set$member, index, model.B) ? _Utils_ap(
 			$author$project$Main$standardAttributes(
 				_Utils_Tuple2(index, value)),
 			_List_fromArray(
@@ -6431,11 +6548,11 @@ var $author$project$Main$view = function (model) {
 											_List_fromArray(
 												[
 													$elm$html$Html$text(
-													$author$project$Main$nameOf(item))
+													$author$project$Sorter$nameOf(item))
 												]))
 										]));
 							},
-							$author$project$Main$allSorters)),
+							$author$project$Sorter$allSorters)),
 						A2(
 						$elm$html$Html$ul,
 						_List_Nil,
@@ -6553,17 +6670,17 @@ var $author$project$Main$view = function (model) {
 							]))
 					]))
 			]),
-		aL: 'Sorting algorithms'
+		aM: 'Sorting algorithms'
 	};
 };
 var $author$project$Main$main = $elm$browser$Browser$document(
 	{
-		aE: $author$project$Main$init,
-		aK: function (_v0) {
+		aF: $author$project$Main$init,
+		aL: function (_v0) {
 			return $author$project$Main$loadSession($author$project$Main$LoadSession);
 		},
-		aM: $author$project$Main$update,
-		aN: $author$project$Main$view
+		aN: $author$project$Main$update,
+		aO: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));

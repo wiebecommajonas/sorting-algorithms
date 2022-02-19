@@ -1,9 +1,12 @@
 module Sorter exposing (..)
 
+import Set exposing (Set)
+
 
 type Sorter
     = Quicksort
     | Bubblesort
+    | Selectionsort
 
 
 type alias SortingList =
@@ -15,4 +18,38 @@ type alias SortingFunction =
 
 
 type alias Log =
-    { pivot : Int, element : Int, result : SortingList }
+    { pivot : Int, elements : Set Int, result : SortingList }
+
+
+allSorters : List Sorter
+allSorters =
+    [ Quicksort, Bubblesort, Selectionsort ]
+
+
+nameOf : Sorter -> String
+nameOf sorter =
+    case sorter of
+        Quicksort ->
+            "Quicksort"
+
+        Bubblesort ->
+            "Bubblesort"
+
+        Selectionsort ->
+            "Selectionsort"
+
+
+toSorter : String -> Sorter
+toSorter name =
+    case name of
+        "Quicksort" ->
+            Quicksort
+
+        "Bubblesort" ->
+            Bubblesort
+
+        "Selectionsort" ->
+            Selectionsort
+
+        _ ->
+            Quicksort

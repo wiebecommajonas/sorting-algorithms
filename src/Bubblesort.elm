@@ -2,6 +2,7 @@ module Bubblesort exposing (bubblesort)
 
 import Browser exposing (element)
 import List.Extra
+import Set
 import Sorter exposing (Log, SortingList)
 
 
@@ -26,10 +27,10 @@ bubblesortHelper list element end log =
                 nextList =
                     List.Extra.swapAt element (element - 1) list
             in
-            bubblesortHelper nextList (element + 1) end (log ++ [ { pivot = prevId, element = thisId, result = nextList } ])
+            bubblesortHelper nextList (element + 1) end (log ++ [ { pivot = prevId, elements = Set.fromList [ thisId ], result = nextList } ])
 
         else
-            bubblesortHelper list (element + 1) end (log ++ [ { pivot = prevId, element = thisId, result = list } ])
+            bubblesortHelper list (element + 1) end (log ++ [ { pivot = prevId, elements = Set.fromList [ thisId ], result = list } ])
 
 
 bubblesort : SortingList -> List Log
