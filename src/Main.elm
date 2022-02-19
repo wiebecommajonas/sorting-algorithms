@@ -6,6 +6,7 @@ import Dict exposing (update)
 import Html exposing (div, text)
 import Html.Attributes exposing (class, href, id, rel, style, target, type_, value)
 import Html.Events exposing (onClick, onInput)
+import Insertionsort exposing (insertionsort)
 import Json.Decode as Dec
 import Json.Encode as Enc
 import Process
@@ -48,6 +49,9 @@ sortingFunction sorter =
 
         Sorter.Selectionsort ->
             selectionsort
+
+        Sorter.Insertionsort ->
+            insertionsort
 
 
 type alias Model =

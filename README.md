@@ -7,3 +7,4 @@ Currently implemented algorithms include:
 - Quicksort
 - Bubblesort
 - Selectionsort
+- Insertionsort

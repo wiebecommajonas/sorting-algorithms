@@ -5543,8 +5543,10 @@ var $author$project$Sorter$nameOf = function (sorter) {
 			return 'Quicksort';
 		case 1:
 			return 'Bubblesort';
-		default:
+		case 2:
 			return 'Selectionsort';
+		default:
+			return 'Insertionsort';
 	}
 };
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
@@ -5903,6 +5905,117 @@ var $author$project$Bubblesort$bubblesort = function (list) {
 		$elm$core$List$length(list),
 		_List_Nil);
 };
+var $elm_community$list_extra$List$Extra$removeAt = F2(
+	function (index, l) {
+		if (index < 0) {
+			return l;
+		} else {
+			var _v0 = A2($elm$core$List$drop, index, l);
+			if (!_v0.b) {
+				return l;
+			} else {
+				var rest = _v0.b;
+				return _Utils_ap(
+					A2($elm$core$List$take, index, l),
+					rest);
+			}
+		}
+	});
+var $author$project$Insertionsort$insertionsortHelper = F4(
+	function (list, pivot, element, log) {
+		insertionsortHelper:
+		while (true) {
+			if (_Utils_cmp(
+				element,
+				$elm$core$List$length(list)) < 0) {
+				var _v0 = A2(
+					$elm$core$Maybe$withDefault,
+					_Utils_Tuple2(-1, -1),
+					A2($elm_community$list_extra$List$Extra$getAt, element, list));
+				var elId = _v0.a;
+				var elValue = _v0.b;
+				if (pivot >= 0) {
+					var _v1 = A2(
+						$elm$core$Maybe$withDefault,
+						_Utils_Tuple2(-1, -1),
+						A2($elm_community$list_extra$List$Extra$getAt, pivot, list));
+					var pivId = _v1.a;
+					var pivValue = _v1.b;
+					if (_Utils_cmp(pivValue, elValue) < 0) {
+						var newList = _Utils_ap(
+							A2($elm$core$List$take, pivot + 1, list),
+							A2(
+								$elm$core$List$cons,
+								_Utils_Tuple2(elId, elValue),
+								A2(
+									$elm$core$List$drop,
+									pivot + 1,
+									A2($elm_community$list_extra$List$Extra$removeAt, element, list))));
+						var $temp$list = newList,
+							$temp$pivot = element,
+							$temp$element = element + 1,
+							$temp$log = _Utils_ap(
+							log,
+							_List_fromArray(
+								[
+									{
+									W: $elm$core$Set$fromList(
+										_List_fromArray(
+											[pivId])),
+									ag: elId,
+									ao: newList
+								}
+								]));
+						list = $temp$list;
+						pivot = $temp$pivot;
+						element = $temp$element;
+						log = $temp$log;
+						continue insertionsortHelper;
+					} else {
+						var $temp$list = list,
+							$temp$pivot = pivot - 1,
+							$temp$element = element,
+							$temp$log = _Utils_ap(
+							log,
+							_List_fromArray(
+								[
+									{
+									W: $elm$core$Set$fromList(
+										_List_fromArray(
+											[pivId])),
+									ag: elId,
+									ao: list
+								}
+								]));
+						list = $temp$list;
+						pivot = $temp$pivot;
+						element = $temp$element;
+						log = $temp$log;
+						continue insertionsortHelper;
+					}
+				} else {
+					var newList = A2(
+						$elm$core$List$cons,
+						_Utils_Tuple2(elId, elValue),
+						A2($elm_community$list_extra$List$Extra$removeAt, element, list));
+					var $temp$list = newList,
+						$temp$pivot = element,
+						$temp$element = element + 1,
+						$temp$log = log;
+					list = $temp$list;
+					pivot = $temp$pivot;
+					element = $temp$element;
+					log = $temp$log;
+					continue insertionsortHelper;
+				}
+			} else {
+				return log;
+			}
+		}
+	});
+var $author$project$Insertionsort$insertionsort = function (list) {
+	return A4($author$project$Insertionsort$insertionsortHelper, list, 0, 1, _List_Nil);
+};
 var $elm$core$Tuple$second = function (_v0) {
 	var y = _v0.b;
 	return y;
@@ -6167,11 +6280,14 @@ var $author$project$Main$sortingFunction = function (sorter) {
 			return $author$project$Quicksort$quicksort;
 		case 1:
 			return $author$project$Bubblesort$bubblesort;
-		default:
+		case 2:
 			return $author$project$Selectionsort$selectionsort;
+		default:
+			return $author$project$Insertionsort$insertionsort;
 	}
 };
 var $author$project$Sorter$Bubblesort = 1;
+var $author$project$Sorter$Insertionsort = 3;
 var $author$project$Sorter$Selectionsort = 2;
 var $author$project$Sorter$toSorter = function (name) {
 	switch (name) {
@@ -6181,6 +6297,8 @@ var $author$project$Sorter$toSorter = function (name) {
 			return 1;
 		case 'Selectionsort':
 			return 2;
+		case 'Insertionsort':
+			return 3;
 		default:
 			return 0;
 	}
@@ -6332,7 +6450,7 @@ var $author$project$Main$Reset = {$: 0};
 var $author$project$Main$Sort = {$: 5};
 var $elm$html$Html$a = _VirtualDom_node('a');
 var $author$project$Sorter$allSorters = _List_fromArray(
-	[0, 1, 2]);
+	[0, 1, 2, 3]);
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {

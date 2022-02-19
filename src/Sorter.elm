@@ -7,6 +7,7 @@ type Sorter
     = Quicksort
     | Bubblesort
     | Selectionsort
+    | Insertionsort
 
 
 type alias SortingList =
@@ -23,7 +24,7 @@ type alias Log =
 
 allSorters : List Sorter
 allSorters =
-    [ Quicksort, Bubblesort, Selectionsort ]
+    [ Quicksort, Bubblesort, Selectionsort, Insertionsort ]
 
 
 nameOf : Sorter -> String
@@ -38,6 +39,9 @@ nameOf sorter =
         Selectionsort ->
             "Selectionsort"
 
+        Insertionsort ->
+            "Insertionsort"
+
 
 toSorter : String -> Sorter
 toSorter name =
@@ -50,6 +54,9 @@ toSorter name =
 
         "Selectionsort" ->
             Selectionsort
+
+        "Insertionsort" ->
+            Insertionsort
 
         _ ->
             Quicksort
