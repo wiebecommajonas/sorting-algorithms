@@ -1,7 +1,8 @@
 {
   "scripts": {
     "serve": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "build-gh-pages": "vite build && touch $PWD/dist/.nojekyll"
   },
   "devDependencies": {
     "elm": "^0.19.1-5",
