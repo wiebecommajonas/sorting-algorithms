@@ -1,7 +1,7 @@
 :root {
     --clr-prm: #FA2742;
     --clr-background-prm: #E8EAE3;
-    --clr-background-scd: #ffffffee;
+    --clr-background-scd: #ffffff;
     --clr-foreground: #373833;
 }
 
@@ -28,7 +28,7 @@ nav {
 }
 
 nav::before {
-    --blur-radius: 20px;
+    --blur-radius: 10px;
     content: '';
     position: absolute;
     top: calc(-1 * var(--blur-radius));
