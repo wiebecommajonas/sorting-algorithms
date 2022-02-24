@@ -1,0 +1,38 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting algorithms</title>
+
+    <script type="module" crossorigin src="/assets/index.f9727fa2.js"></script>
+    <link rel="stylesheet" href="/assets/index.0017942d.css">
+</head>
+
+<body>
+    <div id="elm-app"></div>
+
+
+    <script>
+        const STORAGE_KEY = 'SORTER_CONFIG'
+        var app = Elm.Main.init({
+            node: document.getElementById("elm-app")
+        });
+
+        app.ports.saveSession.subscribe(function (value) {
+            console.log(value)
+            sessionStorage.setItem(STORAGE_KEY, value);
+        });
+
+        app.ports.doLoadSession.subscribe(function () {
+            const item = sessionStorage.getItem(STORAGE_KEY);
+            if (item) {
+                app.ports.loadSession.send(sessionStorage.getItem(STORAGE_KEY));
+            }
+        });
+    </script>
+
+</body>
+
+</html>
